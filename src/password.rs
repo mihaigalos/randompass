@@ -51,10 +51,7 @@ impl Password {
                 ok_special_chars = true;
             }
         }
-        if !ok_special_chars {
-            return false;
-        }
-        true
+        ok_special_chars
     }
 
     fn validate_uppercase(config: &Configurator, pass: String) -> bool {
@@ -66,10 +63,7 @@ impl Password {
                 ok_uppercase = true;
             }
         }
-        if !ok_uppercase {
-            return false;
-        }
-        true
+        ok_uppercase
     }
 
     fn validate_lowercase(config: &Configurator, pass: String) -> bool {
@@ -81,10 +75,7 @@ impl Password {
                 ok_lowercase = true;
             }
         }
-        if !ok_lowercase {
-            return false;
-        }
-        true
+        ok_lowercase
     }
 
     fn validate_numbers(config: &Configurator, pass: String) -> bool {
@@ -96,10 +87,7 @@ impl Password {
                 ok_numbers = true;
             }
         }
-        if !ok_numbers {
-            return false;
-        }
-        true
+        ok_numbers
     }
 }
 

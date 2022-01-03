@@ -34,6 +34,13 @@ impl Password {
     }
 
     fn validate(config: &Configurator, pass: String) -> bool {
+        Password::validate_special_chars(config, pass.clone())
+            && Password::validate_uppercase(config, pass.clone())
+            && Password::validate_lowercase(config, pass.clone())
+            && Password::validate_numbers(config, pass)
+    }
+
+    fn validate_special_chars(config: &Configurator, pass: String) -> bool {
         let mut ok_special_chars = false;
         for e in constants::SPECIAL_CHARS.to_vec().iter() {
             if config.cli_args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
@@ -47,7 +54,10 @@ impl Password {
         if !ok_special_chars {
             return false;
         }
+        true
+    }
 
+    fn validate_uppercase(config: &Configurator, pass: String) -> bool {
         let mut ok_uppercase = false;
         for e in 'A' as u8..'Z' as u8 + 1 {
             if config.cli_args.is_present("no_uppercase") && pass.contains(&e.to_string()) {
@@ -59,7 +69,10 @@ impl Password {
         if !ok_uppercase {
             return false;
         }
+        true
+    }
 
+    fn validate_lowercase(config: &Configurator, pass: String) -> bool {
         let mut ok_lowercase = false;
         for e in 'a' as u8..'z' as u8 + 1 {
             if config.cli_args.is_present("no_lowercase") && pass.contains(&e.to_string()) {
@@ -71,7 +84,10 @@ impl Password {
         if !ok_lowercase {
             return false;
         }
+        true
+    }
 
+    fn validate_numbers(config: &Configurator, pass: String) -> bool {
         let mut ok_numbers = false;
         for e in '0' as u8..'9' as u8 + 1 {
             if config.cli_args.is_present("no_numbers") && pass.contains(&e.to_string()) {

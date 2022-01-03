@@ -1,8 +1,9 @@
-use clap::{clap_app, crate_version};
+use clap::{clap_app, crate_description, crate_version};
 
 fn main() {
     let cli_args = clap_app!(randompass =>
         (version: crate_version!())
+        (about: crate_description!())
         (author: "Mihai Galos <mihaigalos at gmail dot com>")
             (@arg length:           +takes_value -l --length              "Password length.")
             (@arg no_lowercase:                  -w --no_lowercase        "Disable usage of lowercase letters.")

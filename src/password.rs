@@ -51,7 +51,6 @@ impl Password {
                 ok_special_chars = true;
             }
         }
-        println!("specials {} -> {}", pass, ok_special_chars);
         if !ok_special_chars && config.cli_args.is_present("no_special_chars") {
             ok_special_chars = true;
         }
@@ -68,7 +67,6 @@ impl Password {
                 ok_uppercase = true;
             }
         }
-        println!("uppercase {} -> {}", pass, ok_uppercase);
         if !ok_uppercase && config.cli_args.is_present("no_uppercase") {
             ok_uppercase = true;
         }
@@ -85,7 +83,6 @@ impl Password {
                 ok_lowercase = true;
             }
         }
-        println!("lowercase {} -> {}", pass, ok_lowercase);
         if !ok_lowercase && config.cli_args.is_present("no_lowercase") {
             ok_lowercase = true;
         }
@@ -102,7 +99,6 @@ impl Password {
                 ok_numbers = true;
             }
         }
-        println!("numbers {} -> {}", pass, ok_numbers);
         if !ok_numbers && config.cli_args.is_present("no_numbers") {
             ok_numbers = true;
         }

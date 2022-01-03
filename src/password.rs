@@ -6,7 +6,7 @@ pub struct Password {}
 
 impl Password {
     pub fn generate(config: Configurator) -> String {
-        let mut watchdog: usize = constants::MAX_CONCERGENCE_ITERATIONS;
+        let mut watchdog: usize = constants::MAX_CONVERGENCE_ITERATIONS;
         loop {
             let mut alphabet = Alphabet::new(&config);
             let length: usize = config

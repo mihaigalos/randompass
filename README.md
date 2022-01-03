@@ -19,7 +19,7 @@ Finally, other implementations do not guarantee that the required complexity has
 randompass
 ```
 
-For a specific length of, say `32`, use
+For a specific length of, say `32`, use:
 ```bash
 randompass --length 32
 ```

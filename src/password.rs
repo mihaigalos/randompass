@@ -34,26 +34,54 @@ impl Password {
     }
 
     fn validate(config: &Configurator, pass: String) -> bool {
+        let mut ok_special_chars = false;
         for e in constants::SPECIAL_CHARS.to_vec().iter() {
             if config.cli_args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
                 return false;
+            } else if !config.cli_args.is_present("no_special_chars")
+                && pass.contains(&e.to_string())
+            {
+                ok_special_chars = true;
             }
         }
+        if !ok_special_chars {
+            return false;
+        }
+
+        let mut ok_uppercase = false;
         for e in 'A' as u8..'Z' as u8 + 1 {
             if config.cli_args.is_present("no_uppercase") && pass.contains(&e.to_string()) {
                 return false;
+            } else if !config.cli_args.is_present("no_uppercase") && pass.contains(&e.to_string()) {
+                ok_uppercase = true;
             }
         }
+        if !ok_uppercase {
+            return false;
+        }
+
+        let mut ok_lowercase = false;
         for e in 'a' as u8..'z' as u8 + 1 {
             if config.cli_args.is_present("no_lowercase") && pass.contains(&e.to_string()) {
                 return false;
+            } else if !config.cli_args.is_present("no_lowercase") && pass.contains(&e.to_string()) {
+                ok_lowercase = true;
             }
         }
+        if !ok_lowercase {
+            return false;
+        }
 
+        let mut ok_numbers = false;
         for e in '0' as u8..'9' as u8 + 1 {
             if config.cli_args.is_present("no_numbers") && pass.contains(&e.to_string()) {
                 return false;
+            } else if !config.cli_args.is_present("no_numbers") && pass.contains(&e.to_string()) {
+                ok_numbers = true;
             }
+        }
+        if !ok_numbers {
+            return false;
         }
         true
     }

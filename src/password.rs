@@ -51,17 +51,26 @@ impl Password {
                 ok_special_chars = true;
             }
         }
+        println!("specials {} -> {}", pass, ok_special_chars);
+        if !ok_special_chars && config.cli_args.is_present("no_special_chars") {
+            ok_special_chars = true;
+        }
         ok_special_chars
     }
 
     fn validate_uppercase(config: &Configurator, pass: String) -> bool {
         let mut ok_uppercase = false;
         for e in 'A' as u8..'Z' as u8 + 1 {
-            if config.cli_args.is_present("no_uppercase") && pass.contains(&e.to_string()) {
+            let c = e as char;
+            if config.cli_args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
                 return false;
-            } else if !config.cli_args.is_present("no_uppercase") && pass.contains(&e.to_string()) {
+            } else if !config.cli_args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
                 ok_uppercase = true;
             }
+        }
+        println!("uppercase {} -> {}", pass, ok_uppercase);
+        if !ok_uppercase && config.cli_args.is_present("no_uppercase") {
+            ok_uppercase = true;
         }
         ok_uppercase
     }
@@ -69,11 +78,16 @@ impl Password {
     fn validate_lowercase(config: &Configurator, pass: String) -> bool {
         let mut ok_lowercase = false;
         for e in 'a' as u8..'z' as u8 + 1 {
-            if config.cli_args.is_present("no_lowercase") && pass.contains(&e.to_string()) {
+            let c = e as char;
+            if config.cli_args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
                 return false;
-            } else if !config.cli_args.is_present("no_lowercase") && pass.contains(&e.to_string()) {
+            } else if !config.cli_args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
                 ok_lowercase = true;
             }
+        }
+        println!("lowercase {} -> {}", pass, ok_lowercase);
+        if !ok_lowercase && config.cli_args.is_present("no_lowercase") {
+            ok_lowercase = true;
         }
         ok_lowercase
     }
@@ -81,11 +95,16 @@ impl Password {
     fn validate_numbers(config: &Configurator, pass: String) -> bool {
         let mut ok_numbers = false;
         for e in '0' as u8..'9' as u8 + 1 {
-            if config.cli_args.is_present("no_numbers") && pass.contains(&e.to_string()) {
+            let c = e as char;
+            if config.cli_args.is_present("no_numbers") && pass.contains(&c.to_string()) {
                 return false;
-            } else if !config.cli_args.is_present("no_numbers") && pass.contains(&e.to_string()) {
+            } else if !config.cli_args.is_present("no_numbers") && pass.contains(&c.to_string()) {
                 ok_numbers = true;
             }
+        }
+        println!("numbers {} -> {}", pass, ok_numbers);
+        if !ok_numbers && config.cli_args.is_present("no_numbers") {
+            ok_numbers = true;
         }
         ok_numbers
     }

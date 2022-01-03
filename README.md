@@ -23,6 +23,11 @@ For a specific length of, say `32`, use
 randompass --length 32
 ```
 
+For full options, run:
+```bash
+randompass --help
+```
+
 ### Similar work
 
 [`pass-rs`](https://github.com/Jarusk/pass-rs), [`randpas`](https://github.com/ProCode2/randpas), [`randompassword`](https://github.com/pshc/randompassword).

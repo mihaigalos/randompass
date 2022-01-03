@@ -21,4 +21,3 @@ RUN apk update && apk add libgcc
 COPY --from=base /src/target/release/randompass /usr/local/bin
 
 ENTRYPOINT [ "randompass" ]
-

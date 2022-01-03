@@ -30,7 +30,7 @@ impl Password {
             }
             max_iterations = max_iterations - 1;
         }
-        return "ERROR: Cannot generate password after MAX iterations.".to_string();
+        return "ERROR: Cannot generate password after MAX iterations. Consider lowering constraints.".to_string();
     }
 
     fn validate(config: &Configurator, pass: String) -> bool {

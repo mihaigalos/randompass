@@ -15,18 +15,6 @@ fn main() {
     .unwrap_or_else(|e| e.exit());
 
     let config = randompass::config::Configurator { cli_args };
-    let mut alphabet = randompass::alphabet::Alphabet::new(&config);
-    let length: usize = config
-        .cli_args
-        .value_of("length")
-        .unwrap_or(&randompass::constants::DEFAULT_PASS_LEN.to_string())
-        .parse()
-        .unwrap();
-
-    let mut pass = String::new();
-    for _ in 0..length {
-        pass.push(alphabet.get_char());
-    }
-
+    let pass = randompass::password::Password::generate(config);
     println!("{}", pass);
 }

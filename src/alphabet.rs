@@ -40,6 +40,12 @@ fn mixin_numbers(config: &Configurator, chars: &mut Vec<char>) {
     }
 }
 
+fn generate_seed() -> [u8; 32] {
+    let mut seed = [0u8; 32];
+    rand::thread_rng().fill_bytes(&mut seed);
+    seed
+}
+
 impl Alphabet {
     pub fn new(config: &Configurator) -> Alphabet {
         let mut chars: Vec<char> = Vec::with_capacity(constants::ESTIMATED_ALPHABET_CAPACITY);
@@ -50,14 +56,10 @@ impl Alphabet {
         mixin_numbers(config, &mut chars);
 
         let alphabet_length = chars.len();
-
-        let mut seed = [0u8; 32];
-        rand::thread_rng().fill_bytes(&mut seed);
-
         Alphabet {
             chars,
             range: Uniform::new(0, alphabet_length),
-            rng: StdRng::from_seed(seed),
+            rng: StdRng::from_seed(generate_seed()),
         }
     }
 

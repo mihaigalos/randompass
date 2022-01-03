@@ -1,8 +1,7 @@
 use clap::{clap_app, crate_version};
 
 fn main() {
-    for _ in 0..1000 {
-        let cli_args = clap_app!(randompass =>
+    let cli_args = clap_app!(randompass =>
         (version: crate_version!())
         (author: "Mihai Galos <mihaigalos at gmail dot com>")
             (@arg length:           +takes_value -l --length              "Password length.")
@@ -14,8 +13,7 @@ fn main() {
         .get_matches_safe()
         .unwrap_or_else(|e| e.exit());
 
-        let config = randompass::config::Configurator { cli_args };
-        let pass = randompass::password::Password::generate(config);
-        println!("{}", pass);
-    }
+    let config = randompass::config::Configurator { cli_args };
+    let pass = randompass::password::Password::generate(config);
+    println!("{}", pass);
 }

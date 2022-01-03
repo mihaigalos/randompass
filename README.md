@@ -1,6 +1,7 @@
 # randompass
 
 A simple static password generator.
+Generated passwords are 16 characters, lower and uppercase and contain special characters by default.
 
 ### Why?
 

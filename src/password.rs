@@ -66,3 +66,14 @@ impl Password {
         true
     }
 }
+
+#[test]
+fn test_pass_generate_works_when_typical() {
+    use clap::App;
+    let arg_vec = vec!["randompass"];
+    let cli_args = App::new("myprog").get_matches_from(arg_vec);
+
+    let actual = Password::generate(Configurator { cli_args });
+
+    assert!(actual.len() == constants::DEFAULT_PASS_LEN);
+}

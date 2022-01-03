@@ -2,7 +2,7 @@
 name = "randompass"
 edition = "2021"
 version = "0.0.1"
-description = "A simple static password generator."
+description = "🔑 A simple static password generator."
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

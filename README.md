@@ -29,6 +29,14 @@ For full options, run:
 randompass --help
 ```
 
+### Docker
+
+Run the following command to pull and just generate a random password.
+
+```bash
+docker run --rm mihaigalos/randompass
+```
+
 ### Similar work
 
 [`pass-rs`](https://github.com/Jarusk/pass-rs), [`randpas`](https://github.com/ProCode2/randpas), [`randompassword`](https://github.com/pshc/randompassword).

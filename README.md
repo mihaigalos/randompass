@@ -1,5 +1,10 @@
 # randompass
 
+[![CI](https://github.com/mihaigalos/randompass/actions/workflows/ci.yaml/badge.svg)](https://github.com/mihaigalos/randompass/actions/workflows/ci.yaml)
+[![CD](https://github.com/mihaigalos/randompass/actions/workflows/cd.yaml/badge.svg)](https://github.com/mihaigalos/randompass/actions/workflows/cd.yaml)
+[![crates.io](https://img.shields.io/crates/d/randompass.svg)](https://crates.io/crates/randompass)
+[![LoC](https://tokei.rs/b1/github/mihaigalos/randompass)](https://github.com/mihaigalos/randompass)
+
 A simple static password generator.
 Generated passwords are 16 characters, lower and uppercase and contain special characters by default.
 

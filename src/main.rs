@@ -10,10 +10,9 @@ fn main() {
             (@arg no_numbers:                    -n --no_numbers          "Disable usage of numbers.")
             (@arg no_special_chars:              -c --no_special_chars    "Disable usage of special characters (i.e.: !, $, #).")
             (@arg no_uppercase:                  -u --no_uppercase        "Disable usage of uppercase letters.")
-
-    )
-    .get_matches_safe()
-    .unwrap_or_else(|e| e.exit());
+        )
+        .get_matches_safe()
+        .unwrap_or_else(|e| e.exit());
 
         let config = randompass::config::Configurator { cli_args };
         let pass = randompass::password::Password::generate(config);

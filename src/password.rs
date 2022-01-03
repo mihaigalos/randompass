@@ -6,7 +6,7 @@ pub struct Password {}
 
 impl Password {
     pub fn generate(config: Configurator) -> String {
-        let mut max_iterations: usize = constants::MAX_CONCERGENCE_ITERATIONS;
+        let mut watchdog: usize = constants::MAX_CONCERGENCE_ITERATIONS;
         loop {
             let mut alphabet = Alphabet::new(&config);
             let length: usize = config
@@ -24,11 +24,11 @@ impl Password {
             if Password::validate(&config, pass.clone()) {
                 return pass;
             } else {
-                if max_iterations == 0 {
+                if watchdog == 0 {
                     break;
                 }
             }
-            max_iterations = max_iterations - 1;
+            watchdog = watchdog - 1;
         }
         return "ERROR: Cannot generate password after MAX iterations. Consider lowering constraints.".to_string();
     }

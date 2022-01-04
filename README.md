@@ -28,7 +28,7 @@ cargo install randompass
 
 ##### Using precompiled binaries
 
-Precompiled binaries are avialable for multiple architectures in the [Releases](https://github.com/mihaigalos/aim/releases).
+Precompiled binaries are avialable for multiple architectures in the [Releases](https://github.com/mihaigalos/randompass/releases).
 
 ```bash
 randompass

@@ -250,7 +250,7 @@ fn test_pass_generate_works_when_no_numbers() {
     let actual = Password::generate(&config, Alphabet::new(&config));
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
-    assert!(Password::validate_lowercase(&config, actual));
+    assert!(Password::validate_numbers(&config, actual));
 }
 
 #[test]
@@ -264,7 +264,7 @@ fn test_pass_generate_fails_when_numbers_but_none_requested() {
 
     let actual = "123".to_string();
 
-    assert_eq!(Password::validate_lowercase(&config, actual), false);
+    assert_eq!(Password::validate_numbers(&config, actual), false);
 }
 
 #[test]

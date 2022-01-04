@@ -128,7 +128,7 @@ fn test_pass_generate_works_when_typical() {
 }
 
 #[test]
-fn test_pass_generate_works_when_no_spcial_characters() {
+fn test_pass_generate_works_when_no_special_characters() {
     use clap::{App, Arg};
     let arg_vec = vec!["randompass", "-c"];
     let cli_args = App::new("randompass")
@@ -144,6 +144,24 @@ fn test_pass_generate_works_when_no_spcial_characters() {
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
     assert!(Password::validate_special_chars(&config, actual));
+}
+
+#[test]
+fn test_pass_generate_fails_when_special_characters_but_none_requested() {
+    use clap::{App, Arg};
+    let arg_vec = vec!["randompass", "-c"];
+    let cli_args = App::new("randompass")
+        .arg(
+            Arg::with_name("no_special_chars")
+                .short("c")
+                .long("no_special_chars"),
+        )
+        .get_matches_from(arg_vec);
+    let config = Configurator { cli_args };
+
+    let actual = "#$!".to_string();
+
+    assert_eq!(Password::validate_special_chars(&config, actual), false);
 }
 
 #[test]

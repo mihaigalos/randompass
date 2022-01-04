@@ -254,6 +254,20 @@ fn test_pass_generate_works_when_no_numbers() {
 }
 
 #[test]
+fn test_pass_generate_fails_when_numbers_but_none_requested() {
+    use clap::{App, Arg};
+    let arg_vec = vec!["randompass", "-n"];
+    let cli_args = App::new("randompass")
+        .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
+        .get_matches_from(arg_vec);
+    let config = Configurator { cli_args };
+
+    let actual = "123".to_string();
+
+    assert_eq!(Password::validate_lowercase(&config, actual), false);
+}
+
+#[test]
 fn test_pass_generate_fails_when_impossible_constraints() {
     use clap::{App, Arg};
     use rand::distributions::Uniform;

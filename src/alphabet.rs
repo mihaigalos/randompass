@@ -6,9 +6,9 @@ use crate::config::Configurator;
 use crate::constants;
 
 pub struct Alphabet {
-    chars: Vec<char>,
-    range: Uniform<usize>,
-    rng: StdRng,
+    pub chars: Vec<char>,
+    pub range: Uniform<usize>,
+    pub rng: StdRng,
 }
 
 fn mixin_special_chars(config: &Configurator, chars: &mut Vec<char>) {

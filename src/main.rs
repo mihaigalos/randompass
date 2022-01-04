@@ -1,4 +1,5 @@
 use clap::{clap_app, crate_description, crate_version};
+use randompass::alphabet::Alphabet;
 
 fn main() {
     let cli_args = clap_app!(randompass =>
@@ -15,6 +16,12 @@ fn main() {
         .unwrap_or_else(|e| e.exit());
 
     let config = randompass::config::Configurator { cli_args };
-    let pass = randompass::password::Password::generate(&config);
-    println!("{}", pass);
+    let pass = randompass::password::Password::generate(&config, Alphabet::new(&config));
+    if pass.len() > 0 {
+        println!("{}", pass);
+    } else {
+        println!(
+            "ERROR: Cannot generate password after MAX iterations. Consider lowering constraints."
+        );
+    }
 }

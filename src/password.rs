@@ -5,10 +5,9 @@ use crate::constants;
 pub struct Password {}
 
 impl Password {
-    pub fn generate(config: &Configurator) -> String {
+    pub fn generate(config: &Configurator, mut alphabet: Alphabet) -> String {
         let mut watchdog: usize = constants::MAX_CONVERGENCE_ITERATIONS;
         loop {
-            let mut alphabet = Alphabet::new(&config);
             let length: usize = config
                 .cli_args
                 .value_of("length")
@@ -30,7 +29,7 @@ impl Password {
             }
             watchdog = watchdog - 1;
         }
-        return "ERROR: Cannot generate password after MAX iterations. Consider lowering constraints.".to_string();
+        return "".to_string();
     }
 
     fn validate(config: &Configurator, pass: String) -> bool {
@@ -41,6 +40,9 @@ impl Password {
     }
 
     fn validate_special_chars(config: &Configurator, pass: String) -> bool {
+        if pass.len() == 0 {
+            return false;
+        }
         let mut ok_special_chars = false;
         for e in constants::SPECIAL_CHARS.to_vec().iter() {
             if config.cli_args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
@@ -58,6 +60,9 @@ impl Password {
     }
 
     fn validate_uppercase(config: &Configurator, pass: String) -> bool {
+        if pass.len() == 0 {
+            return false;
+        }
         let mut ok_uppercase = false;
         for e in 'A' as u8..'Z' as u8 + 1 {
             let c = e as char;
@@ -72,8 +77,10 @@ impl Password {
         }
         ok_uppercase
     }
-
     fn validate_lowercase(config: &Configurator, pass: String) -> bool {
+        if pass.len() == 0 {
+            return false;
+        }
         let mut ok_lowercase = false;
         for e in 'a' as u8..'z' as u8 + 1 {
             let c = e as char;
@@ -88,8 +95,10 @@ impl Password {
         }
         ok_lowercase
     }
-
     fn validate_numbers(config: &Configurator, pass: String) -> bool {
+        if pass.len() == 0 {
+            return false;
+        }
         let mut ok_numbers = false;
         for e in '0' as u8..'9' as u8 + 1 {
             let c = e as char;
@@ -111,8 +120,9 @@ fn test_pass_generate_works_when_typical() {
     use clap::App;
     let arg_vec = vec!["randompass"];
     let cli_args = App::new("randompass").get_matches_from(arg_vec);
+    let config = Configurator { cli_args };
 
-    let actual = Password::generate(&Configurator { cli_args });
+    let actual = Password::generate(&config, Alphabet::new(&config));
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
 }
@@ -130,7 +140,7 @@ fn test_pass_generate_works_when_no_spcial_characters() {
         .get_matches_from(arg_vec);
     let config = Configurator { cli_args };
 
-    let actual = Password::generate(&config);
+    let actual = Password::generate(&config, Alphabet::new(&config));
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
     assert!(Password::validate_special_chars(&config, actual));
@@ -149,7 +159,7 @@ fn test_pass_generate_works_when_no_lowercase() {
         .get_matches_from(arg_vec);
     let config = Configurator { cli_args };
 
-    let actual = Password::generate(&config);
+    let actual = Password::generate(&config, Alphabet::new(&config));
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
     assert!(Password::validate_lowercase(&config, actual));
@@ -168,7 +178,7 @@ fn test_pass_generate_works_when_no_uppercase() {
         .get_matches_from(arg_vec);
     let config = Configurator { cli_args };
 
-    let actual = Password::generate(&config);
+    let actual = Password::generate(&config, Alphabet::new(&config));
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
     assert!(Password::validate_lowercase(&config, actual));
@@ -183,8 +193,55 @@ fn test_pass_generate_works_when_no_numbers() {
         .get_matches_from(arg_vec);
     let config = Configurator { cli_args };
 
-    let actual = Password::generate(&config);
+    let actual = Password::generate(&config, Alphabet::new(&config));
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
     assert!(Password::validate_lowercase(&config, actual));
+}
+
+#[test]
+fn test_pass_generate_fails_when_impossible_constraints() {
+    use clap::{App, Arg};
+    use rand::distributions::Uniform;
+    use rand::rngs::StdRng;
+    use rand::SeedableRng;
+
+    let arg_vec = vec!["randompass", "-c", "-u", "-o", "-n"];
+    let cli_args = App::new("randompass")
+        .arg(
+            Arg::with_name("no_special_chars")
+                .short("c")
+                .long("no_special_chars"),
+        )
+        .arg(
+            Arg::with_name("no_uppercase")
+                .short("u")
+                .long("no_uppercase"),
+        )
+        .arg(
+            Arg::with_name("no_lowercase")
+                .short("o")
+                .long("no_lowercase"),
+        )
+        .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
+        .get_matches_from(arg_vec);
+    let config = Configurator { cli_args };
+    let chars: Vec<char> = vec!['a'];
+    let alphabet = Alphabet {
+        chars,
+        range: Uniform::new(0, 1),
+        rng: StdRng::from_seed([0u8; 32]),
+    };
+
+    let actual = Password::generate(&config, alphabet);
+
+    println!("{}", actual);
+    assert_ne!(actual.len(), constants::DEFAULT_PASS_LEN);
+    assert_eq!(Password::validate_uppercase(&config, actual.clone()), false);
+    assert_eq!(Password::validate_lowercase(&config, actual.clone()), false);
+    assert_eq!(Password::validate_numbers(&config, actual.clone()), false);
+    assert_eq!(
+        Password::validate_special_chars(&config, actual.clone()),
+        false
+    );
 }

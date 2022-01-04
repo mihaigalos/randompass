@@ -184,6 +184,23 @@ fn test_pass_generate_works_when_no_lowercase() {
 }
 
 #[test]
+fn test_pass_generate_fails_when_lowercase_but_none_requested() {
+    use clap::{App, Arg};
+    let arg_vec = vec!["randompass", "-o"];
+    let cli_args = App::new("randompass")
+        .arg(
+            Arg::with_name("no_lowercase")
+                .short("o")
+                .long("no_lowercase"),
+        )
+        .get_matches_from(arg_vec);
+    let config = Configurator { cli_args };
+
+    let actual = "abc".to_string();
+
+    assert_eq!(Password::validate_lowercase(&config, actual), false);
+}
+#[test]
 fn test_pass_generate_works_when_no_uppercase() {
     use clap::{App, Arg};
     let arg_vec = vec!["randompass", "-u"];

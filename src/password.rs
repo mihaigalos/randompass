@@ -200,6 +200,7 @@ fn test_pass_generate_fails_when_lowercase_but_none_requested() {
 
     assert_eq!(Password::validate_lowercase(&config, actual), false);
 }
+
 #[test]
 fn test_pass_generate_works_when_no_uppercase() {
     use clap::{App, Arg};
@@ -217,6 +218,24 @@ fn test_pass_generate_works_when_no_uppercase() {
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
     assert!(Password::validate_lowercase(&config, actual));
+}
+
+#[test]
+fn test_pass_generate_fails_when_uppercase_but_none_requested() {
+    use clap::{App, Arg};
+    let arg_vec = vec!["randompass", "-u"];
+    let cli_args = App::new("randompass")
+        .arg(
+            Arg::with_name("no_uppercase")
+                .short("u")
+                .long("no_uppercase"),
+        )
+        .get_matches_from(arg_vec);
+    let config = Configurator { cli_args };
+
+    let actual = "ABC".to_string();
+
+    assert_eq!(Password::validate_lowercase(&config, actual), false);
 }
 
 #[test]

@@ -20,6 +20,16 @@ Finally, other implementations do not guarantee that the required complexity has
 
 ### Usage
 
+##### Building from source
+
+```bash
+cargo install randompass
+```
+
+##### Using precompiled binaries
+
+Precompiled binaries are avialable for multiple architectures in the [Releases](https://github.com/mihaigalos/aim/releases).
+
 ```bash
 randompass
 ```
@@ -36,7 +46,9 @@ randompass --help
 
 ### Docker
 
-Run the following command to pull and just generate a random password.
+`aarch64` and `amd64` dockers are available.
+
+Run the following command to pull the image and just generate a random password.
 
 ```bash
 docker run --rm mihaigalos/randompass

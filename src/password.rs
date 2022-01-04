@@ -120,11 +120,11 @@ fn test_pass_generate_works_when_typical() {
 #[test]
 fn test_pass_generate_works_when_no_spcial_characters() {
     use clap::{App, Arg};
-    let arg_vec = vec!["randompass", "-o"];
+    let arg_vec = vec!["randompass", "-c"];
     let cli_args = App::new("randompass")
         .arg(
             Arg::with_name("no_special_chars")
-                .short("o")
+                .short("c")
                 .long("no_special_chars"),
         )
         .get_matches_from(arg_vec);
@@ -134,4 +134,23 @@ fn test_pass_generate_works_when_no_spcial_characters() {
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
     assert!(Password::validate_special_chars(&config, actual));
+}
+
+#[test]
+fn test_pass_generate_works_when_no_lowercase() {
+    use clap::{App, Arg};
+    let arg_vec = vec!["randompass", "-o"];
+    let cli_args = App::new("randompass")
+        .arg(
+            Arg::with_name("no_lowercase")
+                .short("o")
+                .long("no_lowercase"),
+        )
+        .get_matches_from(arg_vec);
+
+    let config = Configurator { cli_args };
+    let actual = Password::generate(&config);
+
+    assert!(actual.len() == constants::DEFAULT_PASS_LEN);
+    assert!(Password::validate_lowercase(&config, actual));
 }

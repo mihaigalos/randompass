@@ -128,8 +128,8 @@ fn test_pass_generate_works_when_no_spcial_characters() {
                 .long("no_special_chars"),
         )
         .get_matches_from(arg_vec);
-
     let config = Configurator { cli_args };
+
     let actual = Password::generate(&config);
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
@@ -147,8 +147,8 @@ fn test_pass_generate_works_when_no_lowercase() {
                 .long("no_lowercase"),
         )
         .get_matches_from(arg_vec);
-
     let config = Configurator { cli_args };
+
     let actual = Password::generate(&config);
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
@@ -166,8 +166,23 @@ fn test_pass_generate_works_when_no_uppercase() {
                 .long("no_uppercase"),
         )
         .get_matches_from(arg_vec);
-
     let config = Configurator { cli_args };
+
+    let actual = Password::generate(&config);
+
+    assert!(actual.len() == constants::DEFAULT_PASS_LEN);
+    assert!(Password::validate_lowercase(&config, actual));
+}
+
+#[test]
+fn test_pass_generate_works_when_no_numbers() {
+    use clap::{App, Arg};
+    let arg_vec = vec!["randompass", "-n"];
+    let cli_args = App::new("randompass")
+        .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
+        .get_matches_from(arg_vec);
+    let config = Configurator { cli_args };
+
     let actual = Password::generate(&config);
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);

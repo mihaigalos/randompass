@@ -5,7 +5,7 @@ use crate::constants;
 pub struct Password {}
 
 impl Password {
-    pub fn generate(config: Configurator) -> String {
+    pub fn generate(config: &Configurator) -> String {
         let mut watchdog: usize = constants::MAX_CONVERGENCE_ITERATIONS;
         loop {
             let mut alphabet = Alphabet::new(&config);
@@ -110,9 +110,28 @@ impl Password {
 fn test_pass_generate_works_when_typical() {
     use clap::App;
     let arg_vec = vec!["randompass"];
-    let cli_args = App::new("myprog").get_matches_from(arg_vec);
+    let cli_args = App::new("randompass").get_matches_from(arg_vec);
 
-    let actual = Password::generate(Configurator { cli_args });
+    let actual = Password::generate(&Configurator { cli_args });
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
+}
+
+#[test]
+fn test_pass_generate_works_when_no_spcial_characters() {
+    use clap::{App, Arg};
+    let arg_vec = vec!["randompass", "-o"];
+    let cli_args = App::new("randompass")
+        .arg(
+            Arg::with_name("no_special_chars")
+                .short("o")
+                .long("no_special_chars"),
+        )
+        .get_matches_from(arg_vec);
+
+    let config = Configurator { cli_args };
+    let actual = Password::generate(&config);
+
+    assert!(actual.len() == constants::DEFAULT_PASS_LEN);
+    assert!(Password::validate_special_chars(&config, actual));
 }

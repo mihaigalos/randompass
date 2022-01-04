@@ -304,7 +304,7 @@ fn test_pass_generate_fails_when_impossible_constraints() {
     let actual = Password::generate(&config, alphabet);
 
     println!("{}", actual);
-    assert_ne!(actual.len(), constants::DEFAULT_PASS_LEN);
+    assert_eq!(actual.len(), 0);
     assert_eq!(Password::validate_uppercase(&config, actual.clone()), false);
     assert_eq!(Password::validate_lowercase(&config, actual.clone()), false);
     assert_eq!(Password::validate_numbers(&config, actual.clone()), false);

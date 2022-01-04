@@ -217,7 +217,7 @@ fn test_pass_generate_works_when_no_uppercase() {
     let actual = Password::generate(&config, Alphabet::new(&config));
 
     assert!(actual.len() == constants::DEFAULT_PASS_LEN);
-    assert!(Password::validate_lowercase(&config, actual));
+    assert!(Password::validate_uppercase(&config, actual));
 }
 
 #[test]
@@ -235,7 +235,7 @@ fn test_pass_generate_fails_when_uppercase_but_none_requested() {
 
     let actual = "ABC".to_string();
 
-    assert_eq!(Password::validate_lowercase(&config, actual), false);
+    assert_eq!(Password::validate_uppercase(&config, actual), false);
 }
 
 #[test]

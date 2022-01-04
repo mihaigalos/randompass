@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/mihaigalos/randompass/actions/workflows/ci.yaml/badge.svg)](https://github.com/mihaigalos/randompass/actions/workflows/ci.yaml)
 [![CD](https://github.com/mihaigalos/randompass/actions/workflows/cd.yaml/badge.svg)](https://github.com/mihaigalos/randompass/actions/workflows/cd.yaml)
-[![codecov](https://codecov.io/gh/mihaigalos/randompass/branch/main/graph/badge.svg?token=WZPOJXZKCY)](https://codecov.io/gh/mihaigalos/randompass)
+[![test coverage](https://codecov.io/gh/mihaigalos/randompass/branch/main/graph/badge.svg?token=WZPOJXZKCY)](https://codecov.io/gh/mihaigalos/randompass)
 [![crates.io](https://img.shields.io/crates/d/randompass.svg)](https://crates.io/crates/randompass)
 [![LoC](https://tokei.rs/b1/github/mihaigalos/randompass)](https://github.com/mihaigalos/randompass)
 

@@ -7,7 +7,7 @@
 [![LoC](https://tokei.rs/b1/github/mihaigalos/randompass)](https://github.com/mihaigalos/randompass)
 
 A simple static password generator.
-Generated passwords are 16 characters, lower and uppercase and contain special characters by default.
+Generated passwords are 20 characters, lower and uppercase and contain special characters by default.
 
 ### Why?
 

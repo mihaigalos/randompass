@@ -1,6 +1,7 @@
 use clap::{clap_app, crate_description, crate_version};
 use randompass::alphabet::Alphabet;
 
+#[cfg(not(tarpaulin_include))]
 fn main() {
     let cli_args = clap_app!(randompass =>
         (version: crate_version!())

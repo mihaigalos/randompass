@@ -1,8 +1,10 @@
 [package]
 name = "randompass"
 edition = "2021"
-version = "0.1.1"
-description = "🔑 A simple static password generator."
+version = "0.1.2"
+description = "🔑 A simple static password generator.\n\nhttps://github.com/mihaigalos/randompass"
+keywords = ["password-generator", "password", "security-tools" ]
+repository = "https://github.com/mihaigalos/randompass"
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

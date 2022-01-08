@@ -8,6 +8,6 @@ pub const DEFAULT_PRINT_HELP: bool = false;
 pub const ESTIMATED_ALPHABET_CAPACITY: usize = 76;
 pub const MAX_CONVERGENCE_ITERATIONS: usize = 10000;
 
-pub const SPECIAL_CHARS: [char; 14] = [
-    '!', '#', '$', '%', '&', '*', ']', '[', '(', ')', '{', '}', '+', '-',
+pub const SPECIAL_CHARS: [char; 18] = [
+    '!', '#', '$', '%', '&', '*', ']', '[', '(', ')', '{', '}', '+', '-', ',', '=', '/', '?',
 ];

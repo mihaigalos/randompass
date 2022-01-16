@@ -4,6 +4,7 @@
 [![CD](https://github.com/mihaigalos/randompass/actions/workflows/cd.yaml/badge.svg)](https://github.com/mihaigalos/randompass/actions/workflows/cd.yaml)
 [![test coverage](https://codecov.io/gh/mihaigalos/randompass/branch/main/graph/badge.svg?token=WZPOJXZKCY)](https://codecov.io/gh/mihaigalos/randompass)
 [![crates.io](https://img.shields.io/crates/d/randompass.svg)](https://crates.io/crates/randompass)
+[![docker pulls](https://img.shields.io/docker/pulls/mihaigalos/randompass)](https://hub.docker.com/r/mihaigalos/randompass)
 [![LoC](https://tokei.rs/b1/github/mihaigalos/randompass)](https://github.com/mihaigalos/randompass)
 
 A simple static password generator.
@@ -29,7 +30,7 @@ cargo install randompass
 
 ##### Using precompiled binaries
 
-Precompiled binaries are available for multiple architectures in the [Releases](https://github.com/mihaigalos/randompass/releases).
+Precompiled binaries are available for multiple architectures in [Releases](https://github.com/mihaigalos/randompass/releases).
 
 ```bash
 randompass

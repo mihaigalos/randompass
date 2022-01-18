@@ -59,10 +59,7 @@ impl Password {
                 return Ok(());
             }
         }
-        if config.cli_args.is_present("no_special_chars") {
-            return Ok(());
-        }
-        Err(ValidateError::NoSpecialChars)
+        Ok(())
     }
 
     fn validate_uppercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
@@ -74,10 +71,7 @@ impl Password {
                 return Ok(());
             }
         }
-        if config.cli_args.is_present("no_uppercase") {
-            return Ok(());
-        }
-        Err(ValidateError::NoUpperCase)
+        Ok(())
     }
     fn validate_lowercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in 'a' as u8..'z' as u8 + 1 {
@@ -88,10 +82,7 @@ impl Password {
                 return Ok(());
             }
         }
-        if config.cli_args.is_present("no_lowercase") {
-            return Ok(());
-        }
-        Err(ValidateError::NoLowerCase)
+        Ok(())
     }
     fn validate_numbers(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in '0' as u8..'9' as u8 + 1 {
@@ -102,10 +93,8 @@ impl Password {
                 return Ok(());
             }
         }
-        if config.cli_args.is_present("no_numbers") {
-            return Ok(());
-        }
-        Err(ValidateError::NoNumbers)
+
+        Ok(())
     }
 }
 

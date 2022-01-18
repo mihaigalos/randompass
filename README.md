@@ -18,7 +18,7 @@ There are a few implementations around, but their licensing meant they cannot be
 
 Moreover, they require explicit flags to _enable_ a specific complication (i.e.: special chars, uppercase); `randompass` has them enabled by default and the user can _disable_ them instead.
 
-Finally, other implementations do not guarantee that the required complexity has been met (i.e.: the password might not contain a required complication).
+Finally, they do not guarantee that the required complexity has been met (i.e.: the password might not contain a required complication).
 
 ### Usage
 

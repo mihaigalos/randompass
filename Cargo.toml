@@ -11,4 +11,5 @@ license = "MIT"
 
 [dependencies]
 clap = "2.33.2"
+custom_error = "1.9.2"
 rand = "0.8"

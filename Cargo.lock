@@ -50,6 +50,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "custom_error"
+version = "1.9.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4f8a51dd197fa6ba5b4dc98a990a43cc13693c23eb0089ebb0fcc1f04152bca6"
+
+[[package]]
 name = "getrandom"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -126,6 +132,7 @@ name = "randompass"
 version = "0.1.2"
 dependencies = [
  "clap",
+ "custom_error",
  "rand",
 ]
 

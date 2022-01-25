@@ -3,7 +3,8 @@ name = "randompass"
 edition = "2021"
 version = "0.2.0"
 description = "🔑 A simple static password generator.\n\nhttps://github.com/mihaigalos/randompass"
-keywords = ["password-generator", "password", "security-tools" ]
+keywords = ["password", "password-generator", "random", "key", "security-tools"]
+categories = ["cryptography"]
 repository = "https://github.com/mihaigalos/randompass"
 license = "MIT"
 

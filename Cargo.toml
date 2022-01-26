@@ -1,8 +1,8 @@
 [package]
 name = "randompass"
 edition = "2021"
-version = "0.2.1"
-description = "🔑 A simple static password generator.\n\nhttps://github.com/mihaigalos/randompass"
+version = "0.2.2"
+description = "🔑 A simple static password generator."
 keywords = ["password", "password-generator", "random", "key", "security-tools"]
 categories = ["cryptography"]
 repository = "https://github.com/mihaigalos/randompass"

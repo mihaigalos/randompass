@@ -12,20 +12,20 @@ pub struct Alphabet {
 }
 
 fn mixin_special_chars(config: &Configurator, chars: &mut Vec<char>) {
-    if !config.cli_args.is_present("no_special_chars") {
+    if !config.args.is_present("no_special_chars") {
         chars.append(&mut constants::SPECIAL_CHARS.to_vec());
     }
 }
 
 fn mixin_uppercase_letters(config: &Configurator, chars: &mut Vec<char>) {
-    if !config.cli_args.is_present("no_uppercase") {
+    if !config.args.is_present("no_uppercase") {
         for e in 'A' as u8..'Z' as u8 + 1 {
             chars.push(e as char);
         }
     }
 }
 fn mixin_lowercase_letters(config: &Configurator, chars: &mut Vec<char>) {
-    if !config.cli_args.is_present("no_lowercase") {
+    if !config.args.is_present("no_lowercase") {
         for e in 'a' as u8..'z' as u8 + 1 {
             chars.push(e as char);
         }
@@ -33,7 +33,7 @@ fn mixin_lowercase_letters(config: &Configurator, chars: &mut Vec<char>) {
 }
 
 fn mixin_numbers(config: &Configurator, chars: &mut Vec<char>) {
-    if !config.cli_args.is_present("no_numbers") {
+    if !config.args.is_present("no_numbers") {
         for e in '0' as u8..'9' as u8 + 1 {
             chars.push(e as char);
         }

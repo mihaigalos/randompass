@@ -1,7 +1,7 @@
 [package]
 name = "randompass"
 edition = "2021"
-version = "0.2.2"
+version = "0.2.3"
 description = "🔑 A simple static password generator."
 keywords = ["password", "password-generator", "random", "key", "security-tools"]
 categories = ["cryptography"]
@@ -9,6 +9,7 @@ repository = "https://github.com/mihaigalos/randompass"
 license = "MIT"
 
 [dependencies]
-clap = "2.33.2"
+autoclap = "0.2.1"
+clap = "3.0.13"
 custom_error = "1.9.2"
 rand = "0.8"

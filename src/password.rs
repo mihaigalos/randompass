@@ -10,7 +10,7 @@ impl Password {
         let mut watchdog: usize = constants::MAX_CONVERGENCE_ITERATIONS;
         loop {
             let length: usize = config
-                .cli_args
+                .args
                 .value_of("length")
                 .unwrap_or(&constants::DEFAULT_PASS_LEN.to_string())
                 .parse()
@@ -51,11 +51,9 @@ impl Password {
     }
     fn validate_special_chars(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in constants::SPECIAL_CHARS.to_vec().iter() {
-            if config.cli_args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
+            if config.args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
                 return Err(ValidateError::NoSpecialChars);
-            } else if !config.cli_args.is_present("no_special_chars")
-                && pass.contains(&e.to_string())
-            {
+            } else if !config.args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
                 return Ok(());
             }
         }
@@ -65,9 +63,9 @@ impl Password {
     fn validate_uppercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in 'A' as u8..'Z' as u8 + 1 {
             let c = e as char;
-            if config.cli_args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
+            if config.args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoUpperCase);
-            } else if !config.cli_args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
+            } else if !config.args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
                 return Ok(());
             }
         }
@@ -76,9 +74,9 @@ impl Password {
     fn validate_lowercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in 'a' as u8..'z' as u8 + 1 {
             let c = e as char;
-            if config.cli_args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
+            if config.args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoLowerCase);
-            } else if !config.cli_args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
+            } else if !config.args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
                 return Ok(());
             }
         }
@@ -87,9 +85,9 @@ impl Password {
     fn validate_numbers(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in '0' as u8..'9' as u8 + 1 {
             let c = e as char;
-            if config.cli_args.is_present("no_numbers") && pass.contains(&c.to_string()) {
+            if config.args.is_present("no_numbers") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoNumbers);
-            } else if !config.cli_args.is_present("no_numbers") && pass.contains(&c.to_string()) {
+            } else if !config.args.is_present("no_numbers") && pass.contains(&c.to_string()) {
                 return Ok(());
             }
         }
@@ -114,8 +112,8 @@ mod tests {
     fn test_pass_generate_works_when_typical() {
         use clap::App;
         let arg_vec = vec!["randompass"];
-        let cli_args = App::new("randompass").get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let args = App::new("randompass").get_matches_from(arg_vec);
+        let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
 
@@ -127,14 +125,14 @@ mod tests {
     fn test_pass_generate_works_when_no_special_characters() {
         use clap::{App, Arg};
         let arg_vec = vec!["randompass", "-c"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(
                 Arg::with_name("no_special_chars")
                     .short("c")
                     .long("no_special_chars"),
             )
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
 
@@ -145,14 +143,14 @@ mod tests {
     fn test_pass_generate_fails_when_special_characters_but_none_requested() {
         use clap::{App, Arg};
         let arg_vec = vec!["randompass", "-c"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(
                 Arg::with_name("no_special_chars")
                     .short("c")
                     .long("no_special_chars"),
             )
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
 
         let actual = "#$!".to_string();
 
@@ -166,14 +164,14 @@ mod tests {
     fn test_pass_generate_works_when_no_lowercase() {
         use clap::{App, Arg};
         let arg_vec = vec!["randompass", "-o"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(
                 Arg::with_name("no_lowercase")
                     .short("o")
                     .long("no_lowercase"),
             )
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
 
@@ -184,14 +182,14 @@ mod tests {
     fn test_pass_generate_fails_when_lowercase_but_none_requested() {
         use clap::{App, Arg};
         let arg_vec = vec!["randompass", "-o"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(
                 Arg::with_name("no_lowercase")
                     .short("o")
                     .long("no_lowercase"),
             )
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
 
         let actual = "abc".to_string();
 
@@ -205,14 +203,14 @@ mod tests {
     fn test_pass_generate_works_when_no_uppercase() {
         use clap::{App, Arg};
         let arg_vec = vec!["randompass", "-u"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(
                 Arg::with_name("no_uppercase")
                     .short("u")
                     .long("no_uppercase"),
             )
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
 
@@ -223,14 +221,14 @@ mod tests {
     fn test_pass_generate_fails_when_uppercase_but_none_requested() {
         use clap::{App, Arg};
         let arg_vec = vec!["randompass", "-u"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(
                 Arg::with_name("no_uppercase")
                     .short("u")
                     .long("no_uppercase"),
             )
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
 
         let actual = "ABC".to_string();
 
@@ -244,10 +242,10 @@ mod tests {
     fn test_pass_generate_works_when_no_numbers() {
         use clap::{App, Arg};
         let arg_vec = vec!["randompass", "-n"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
 
@@ -258,10 +256,10 @@ mod tests {
     fn test_pass_generate_fails_when_numbers_but_none_requested() {
         use clap::{App, Arg};
         let arg_vec = vec!["randompass", "-n"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
 
         let actual = "123".to_string();
 
@@ -279,7 +277,7 @@ mod tests {
         use rand::SeedableRng;
 
         let arg_vec = vec!["randompass", "-c", "-u", "-o", "-n"];
-        let cli_args = App::new("randompass")
+        let args = App::new("randompass")
             .arg(
                 Arg::with_name("no_special_chars")
                     .short("c")
@@ -297,7 +295,7 @@ mod tests {
             )
             .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
             .get_matches_from(arg_vec);
-        let config = Configurator { cli_args };
+        let config = Configurator { args };
         let chars: Vec<char> = vec!['a'];
         let alphabet = Alphabet {
             chars,

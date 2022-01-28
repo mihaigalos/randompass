@@ -99,6 +99,44 @@ impl Password {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn matches_from(arg_vec: Vec<&str>) -> clap::ArgMatches {
+        use clap::{App, Arg};
+        let args = App::new("randompass")
+            .arg(
+                Arg::new("length")
+                    .long("length")
+                    .short('l')
+                    .help("Password length."),
+            )
+            .arg(
+                Arg::new("no_lowercase")
+                    .long("no_lowercase")
+                    .short('o')
+                    .help("Disable usage of lowercase letters."),
+            )
+            .arg(
+                Arg::new("no_numbers")
+                    .long("no_numbers")
+                    .short('n')
+                    .help("Disable usage of numbers."),
+            )
+            .arg(
+                Arg::new("no_special_chars")
+                    .long("no_special_chars")
+                    .short('c')
+                    .help("Disable usage of special characters (i.e.: !, $, #)."),
+            )
+            .arg(
+                Arg::new("no_uppercase")
+                    .long("no_uppercase")
+                    .short('u')
+                    .help("Disable usage of uppercase letters."),
+            )
+            .get_matches_from(arg_vec);
+        args
+    }
+
     macro_rules! assert_err {
         ($expression:expr, $($pattern:tt)+) => {
             match $expression {
@@ -110,9 +148,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_works_when_typical() {
-        use clap::App;
-        let arg_vec = vec!["randompass"];
-        let args = App::new("randompass").get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass"]);
         let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
@@ -123,15 +159,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_works_when_no_special_characters() {
-        use clap::{App, Arg};
-        let arg_vec = vec!["randompass", "-c"];
-        let args = App::new("randompass")
-            .arg(
-                Arg::with_name("no_special_chars")
-                    .short("c")
-                    .long("no_special_chars"),
-            )
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-c"]);
         let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
@@ -141,15 +169,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_fails_when_special_characters_but_none_requested() {
-        use clap::{App, Arg};
-        let arg_vec = vec!["randompass", "-c"];
-        let args = App::new("randompass")
-            .arg(
-                Arg::with_name("no_special_chars")
-                    .short("c")
-                    .long("no_special_chars"),
-            )
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-c"]);
         let config = Configurator { args };
 
         let actual = "#$!".to_string();
@@ -162,15 +182,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_works_when_no_lowercase() {
-        use clap::{App, Arg};
-        let arg_vec = vec!["randompass", "-o"];
-        let args = App::new("randompass")
-            .arg(
-                Arg::with_name("no_lowercase")
-                    .short("o")
-                    .long("no_lowercase"),
-            )
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-o"]);
         let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
@@ -180,15 +192,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_fails_when_lowercase_but_none_requested() {
-        use clap::{App, Arg};
-        let arg_vec = vec!["randompass", "-o"];
-        let args = App::new("randompass")
-            .arg(
-                Arg::with_name("no_lowercase")
-                    .short("o")
-                    .long("no_lowercase"),
-            )
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-o"]);
         let config = Configurator { args };
 
         let actual = "abc".to_string();
@@ -201,15 +205,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_works_when_no_uppercase() {
-        use clap::{App, Arg};
-        let arg_vec = vec!["randompass", "-u"];
-        let args = App::new("randompass")
-            .arg(
-                Arg::with_name("no_uppercase")
-                    .short("u")
-                    .long("no_uppercase"),
-            )
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-u"]);
         let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
@@ -219,15 +215,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_fails_when_uppercase_but_none_requested() {
-        use clap::{App, Arg};
-        let arg_vec = vec!["randompass", "-u"];
-        let args = App::new("randompass")
-            .arg(
-                Arg::with_name("no_uppercase")
-                    .short("u")
-                    .long("no_uppercase"),
-            )
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-u"]);
         let config = Configurator { args };
 
         let actual = "ABC".to_string();
@@ -240,11 +228,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_works_when_no_numbers() {
-        use clap::{App, Arg};
-        let arg_vec = vec!["randompass", "-n"];
-        let args = App::new("randompass")
-            .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-n"]);
         let config = Configurator { args };
 
         let actual = Password::generate(&config, Alphabet::new(&config));
@@ -254,11 +238,7 @@ mod tests {
 
     #[test]
     fn test_pass_generate_fails_when_numbers_but_none_requested() {
-        use clap::{App, Arg};
-        let arg_vec = vec!["randompass", "-n"];
-        let args = App::new("randompass")
-            .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-n"]);
         let config = Configurator { args };
 
         let actual = "123".to_string();
@@ -271,30 +251,11 @@ mod tests {
 
     #[test]
     fn test_pass_generate_fails_when_impossible_constraints() {
-        use clap::{App, Arg};
         use rand::distributions::Uniform;
         use rand::rngs::StdRng;
         use rand::SeedableRng;
 
-        let arg_vec = vec!["randompass", "-c", "-u", "-o", "-n"];
-        let args = App::new("randompass")
-            .arg(
-                Arg::with_name("no_special_chars")
-                    .short("c")
-                    .long("no_special_chars"),
-            )
-            .arg(
-                Arg::with_name("no_uppercase")
-                    .short("u")
-                    .long("no_uppercase"),
-            )
-            .arg(
-                Arg::with_name("no_lowercase")
-                    .short("o")
-                    .long("no_lowercase"),
-            )
-            .arg(Arg::with_name("no_numbers").short("n").long("no_numbers"))
-            .get_matches_from(arg_vec);
+        let args = matches_from(vec!["randompass", "-c", "-u", "-o", "-n"]);
         let config = Configurator { args };
         let chars: Vec<char> = vec!['a'];
         let alphabet = Alphabet {

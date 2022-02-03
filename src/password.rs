@@ -107,6 +107,7 @@ mod tests {
                 Arg::new("length")
                     .long("length")
                     .short('l')
+                    .takes_value(true)
                     .help("Password length."),
             )
             .arg(
@@ -155,6 +156,17 @@ mod tests {
 
         println!("len: {}", actual.len());
         assert!(actual.len() == constants::DEFAULT_PASS_LEN);
+    }
+
+    #[test]
+    fn test_pass_generate_works_when_length_requested() {
+        let required_length = 32;
+        let args = matches_from(vec!["randompass", "-l", &required_length.to_string()]);
+        let config = Configurator { args };
+
+        let actual = Password::generate(&config, Alphabet::new(&config));
+
+        assert!(actual.len() == required_length);
     }
 
     #[test]

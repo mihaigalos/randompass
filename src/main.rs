@@ -10,6 +10,7 @@ fn main() {
             Arg::new("length")
                 .long("length")
                 .short('l')
+                .takes_value(true)
                 .help("Password length."),
         )
         .arg(

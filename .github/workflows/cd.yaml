@@ -15,10 +15,17 @@ on:
 jobs:
   generate-cd-inputs:
     runs-on: ubuntu-latest
+    outputs:
+      description: ${{ steps.set-outputs.outputs.description }}
+      homepage: ${{ steps.set-outputs.outputs.homepage }}
+      maintainer: ${{ steps.set-outputs.outputs.maintainer }}
+      project: ${{ steps.set-outputs.outputs.project }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - run: |
+      - name: Set outputs
+        id: set-outputs
+        run: |
           echo "::set-output name=description::$(grep ^description Cargo.toml | cut -d'=' -f2)"
           echo "::set-output name=homepage::$(grep ^repository Cargo.toml | cut -d'=' -f2)"
           echo "::set-output name=maintainer::$(grep ^authors Cargo.toml | cut -d'=' -f2 | sed -e 's/[][]//g')"

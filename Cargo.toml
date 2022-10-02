@@ -2,6 +2,7 @@
 name = "randompass"
 edition = "2021"
 version = "0.2.5"
+authors = ["Mihai Galos <mihaigalos@gmail.com>"]
 description = "🔑 A simple static password generator."
 keywords = ["password", "password-generator", "random", "key", "security-tools"]
 categories = ["cryptography"]

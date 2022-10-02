@@ -19,13 +19,14 @@ jobs:
       description: ${{ steps.set-outputs.outputs.description }}
       homepage: ${{ steps.set-outputs.outputs.homepage }}
       maintainer: ${{ steps.set-outputs.outputs.maintainer }}
-      project: ${{ steps.set-outputs.outputs.project }}
+      project-name: ${{ steps.set-outputs.outputs.project-name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set outputs
         id: set-outputs
         run: |
+          set -eu pipefail
           echo "::set-output name=description::$(grep ^description Cargo.toml | cut -d'=' -f2)"
           echo "::set-output name=homepage::$(grep ^repository Cargo.toml | cut -d'=' -f2)"
           echo "::set-output name=maintainer::$(grep ^authors Cargo.toml | cut -d'=' -f2 | sed -e 's/[][]//g')"

@@ -14,16 +14,23 @@ on:
 
 jobs:
   generate-cd-inputs:
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "::set-output name=description::$(grep ^description Cargo.toml | cut -d'=' -f2)"
-          echo "::set-output name=homepage::$(grep ^repository Cargo.toml | cut -d'=' -f2)"
-          echo "::set-output name=maintainer::$(grep ^authors Cargo.toml | cut -d'=' -f2 | sed -e 's/[][]//g')"
+    outputs:
+      description:
+        value: ${{ steps.extract-description.outputs.description }}
+      homepage:
+        value: ${{ steps.extract-homepage.outputs.homepage }}
+      maintainer:
+        value: ${{ steps.extract-homepage.outputs.homepage }}
+    run: |
+      echo "::set-output name=description::$(grep ^description Cargo.toml | cut -d'=' -f2)"
+      echo "::set-output name=homepage::$(grep ^repository Cargo.toml | cut -d'=' -f2)"
+      echo "::set-output name=maintainer::$(grep ^authors Cargo.toml | cut -d'=' -f2 | sed -e 's/[][]//g')"
 
   cd:
     uses: mihaigalos/config/.github/workflows/rust-cd.yaml@cd/generalize/debian-params
-    inputs:
+    needs:
+      - generate-cd-inputs
+    with:
       COPYRIGHT_YEARS: 2021-3021
       DESCRIPTION: ${{ steps.generate-cd-inputs.outputs.description }}
       HOMEPAGE: ${{ steps.generate-cd-inputs.outputs.homepage }}

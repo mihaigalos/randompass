@@ -42,7 +42,7 @@ fn main() {
 
     let config = randompass::config::Configurator { args };
     let pass = randompass::password::Password::generate(&config, Alphabet::new(&config));
-    if pass.len() > 0 {
+    if !pass.is_empty(){
         println!("{}", pass);
     } else {
         println!(

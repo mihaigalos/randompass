@@ -21,24 +21,23 @@ impl Password {
                 pass.push(alphabet.get_char());
             }
 
-            if Password::validate(&config, &pass).is_ok() {
+            if Password::validate(config, &pass).is_ok() {
                 return pass;
-            } else {
-                if watchdog == 0 {
+            } else if watchdog == 0 {
                     break;
-                }
             }
-            watchdog = watchdog - 1;
+            
+            watchdog -= 1;
         }
-        return "".to_string();
+        "".to_string()
     }
 
     fn validate(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        Password::validate_length(&pass)?;
-        Password::validate_special_chars(config, &pass)?;
-        Password::validate_uppercase(config, &pass)?;
-        Password::validate_lowercase(config, &pass)?;
-        Password::validate_numbers(config, &pass)?;
+        Password::validate_length(pass)?;
+        Password::validate_special_chars(config, pass)?;
+        Password::validate_uppercase(config, pass)?;
+        Password::validate_lowercase(config, pass)?;
+        Password::validate_numbers(config, pass)?;
         Ok(())
     }
 
@@ -61,7 +60,7 @@ impl Password {
     }
 
     fn validate_uppercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in 'A' as u8..'Z' as u8 + 1 {
+        for e in b'A'..b'Z'+ 1 {
             let c = e as char;
             if config.args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoUpperCase);
@@ -72,7 +71,7 @@ impl Password {
         Ok(())
     }
     fn validate_lowercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in 'a' as u8..'z' as u8 + 1 {
+        for e in b'a'..b'z'+ 1 {
             let c = e as char;
             if config.args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoLowerCase);
@@ -83,7 +82,7 @@ impl Password {
         Ok(())
     }
     fn validate_numbers(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in '0' as u8..'9' as u8 + 1 {
+        for e in b'0'..b'9'+ 1 {
             let c = e as char;
             if config.args.is_present("no_numbers") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoNumbers);

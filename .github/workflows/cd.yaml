@@ -24,7 +24,7 @@ jobs:
           echo "::set-output name=maintainer::$(grep ^authors Cargo.toml | cut -d'=' -f2 | sed -e 's/[][]//g')"
 
   cd:
-    uses: mihaigalos/config/.github/workflows/rust-cd.yaml@cd/generalize/debian-params
+    uses: mihaigalos/config/.github/workflows/rust-cd.yaml@main
     needs:
       - generate-cd-inputs
     with:

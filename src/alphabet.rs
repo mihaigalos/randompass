@@ -19,14 +19,14 @@ fn mixin_special_chars(config: &Configurator, chars: &mut Vec<char>) {
 
 fn mixin_uppercase_letters(config: &Configurator, chars: &mut Vec<char>) {
     if !config.args.is_present("no_uppercase") {
-        for e in 'A' as u8..'Z' as u8 + 1 {
+        for e in b'A'..b'Z' + 1 {
             chars.push(e as char);
         }
     }
 }
 fn mixin_lowercase_letters(config: &Configurator, chars: &mut Vec<char>) {
     if !config.args.is_present("no_lowercase") {
-        for e in 'a' as u8..'z' as u8 + 1 {
+        for e in b'a'..b'z'+ 1 {
             chars.push(e as char);
         }
     }
@@ -34,7 +34,7 @@ fn mixin_lowercase_letters(config: &Configurator, chars: &mut Vec<char>) {
 
 fn mixin_numbers(config: &Configurator, chars: &mut Vec<char>) {
     if !config.args.is_present("no_numbers") {
-        for e in '0' as u8..'9' as u8 + 1 {
+        for e in b'0'..b'9'+ 1 {
             chars.push(e as char);
         }
     }

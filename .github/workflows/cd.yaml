@@ -22,6 +22,7 @@ jobs:
           echo "::set-output name=description::$(grep ^description Cargo.toml | cut -d'=' -f2)"
           echo "::set-output name=homepage::$(grep ^repository Cargo.toml | cut -d'=' -f2)"
           echo "::set-output name=maintainer::$(grep ^authors Cargo.toml | cut -d'=' -f2 | sed -e 's/[][]//g')"
+          echo "::set-output name=project-name::$(grep ^name Cargo.toml | cut -d'=' -f2)"
 
   cd:
     uses: mihaigalos/config/.github/workflows/rust-cd.yaml@main
@@ -32,6 +33,7 @@ jobs:
       DESCRIPTION: ${{ needs.generate-cd-inputs.outputs.description }}
       HOMEPAGE: ${{ needs.generate-cd-inputs.outputs.homepage }}
       MAINTAINER: ${{ needs.generate-cd-inputs.outputs.maintainer }}
+      PROJECT_NAME: ${{ needs.generate-cd-inputs.outputs.project-name }}
     secrets:
       CARGO_API_KEY: ${{ secrets.CARGO_API_KEY }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

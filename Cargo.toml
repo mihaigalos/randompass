@@ -1,7 +1,7 @@
 [package]
 name = "randompass"
 edition = "2021"
-version = "0.2.4"
+version = "0.2.5"
 description = "🔑 A simple static password generator."
 keywords = ["password", "password-generator", "random", "key", "security-tools"]
 categories = ["cryptography"]

@@ -13,8 +13,21 @@ on:
         default: false
 
 jobs:
+  generate-cd-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::set-output name=description::$(grep ^description Cargo.toml | cut -d'=' -f2)"
+          echo "::set-output name=homepage::$(grep ^repository Cargo.toml | cut -d'=' -f2)"
+          echo "::set-output name=maintainer::$(grep ^authors Cargo.toml | cut -d'=' -f2 | sed -e 's/[][]//g')"
+
   cd:
-    uses: mihaigalos/config/.github/workflows/rust-cd.yaml@main
+    uses: mihaigalos/config/.github/workflows/rust-cd.yaml@cd/generalize/debian-params
+    inputs:
+      COPYRIGHT_YEARS: 2021-3021
+      DESCRIPTION: ${{ steps.generate-cd-inputs.outputs.description }}
+      HOMEPAGE: ${{ steps.generate-cd-inputs.outputs.homepage }}
+      MAINTAINER: ${{ steps.generate-cd-inputs.outputs.maintainer }}
     secrets:
       CARGO_API_KEY: ${{ secrets.CARGO_API_KEY }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

@@ -10,7 +10,7 @@ repository = "https://github.com/mihaigalos/randompass"
 license = "MIT"
 
 [dependencies]
-autoclap = "0.2.1"
+autoclap = "0.3.11"
 clap = "3.2.23"
 custom_error = "1.9.2"
 rand = "0.8"

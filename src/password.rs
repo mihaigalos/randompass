@@ -11,7 +11,8 @@ impl Password {
         loop {
             let length: usize = config
                 .args
-                .value_of("length")
+                .get_one::<String>("length")
+                .map(|s| s.as_str())
                 .unwrap_or(&constants::DEFAULT_PASS_LEN.to_string())
                 .parse()
                 .unwrap();
@@ -50,48 +51,50 @@ impl Password {
     }
     fn validate_special_chars(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in constants::SPECIAL_CHARS.to_vec().iter() {
-            if config.args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
+            if config.args.get_flag("no_special_chars") && pass.contains(&e.to_string()) {
                 return Err(ValidateError::NoSpecialChars);
-            } else if !config.args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
+            } else if !config.args.get_flag("no_special_chars") && pass.contains(&e.to_string()) {
                 return Ok(());
             }
         }
-        Ok(())
+        Err(ValidateError::NoSpecialChars)
     }
 
     fn validate_uppercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in b'A'..b'Z'+ 1 {
             let c = e as char;
-            if config.args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
+            if config.args.get_flag("no_uppercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoUpperCase);
-            } else if !config.args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
+            } else if !config.args.get_flag("no_uppercase") && pass.contains(&c.to_string()) {
                 return Ok(());
             }
         }
-        Ok(())
+        Err(ValidateError::NoUpperCase)
     }
+
     fn validate_lowercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in b'a'..b'z'+ 1 {
             let c = e as char;
-            if config.args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
+            if config.args.get_flag("no_lowercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoLowerCase);
-            } else if !config.args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
+            } else if !config.args.get_flag("no_lowercase") && pass.contains(&c.to_string()) {
                 return Ok(());
             }
         }
-        Ok(())
+        Err(ValidateError::NoLowerCase)
     }
+
     fn validate_numbers(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in b'0'..b'9'+ 1 {
             let c = e as char;
-            if config.args.is_present("no_numbers") && pass.contains(&c.to_string()) {
+            if config.args.get_flag("no_numbers") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoNumbers);
-            } else if !config.args.is_present("no_numbers") && pass.contains(&c.to_string()) {
+            } else if !config.args.get_flag("no_numbers") && pass.contains(&c.to_string()) {
                 return Ok(());
             }
         }
 
-        Ok(())
+        Err(ValidateError::NoNumbers)
     }
 }
 

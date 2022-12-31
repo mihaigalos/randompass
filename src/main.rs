@@ -1,5 +1,5 @@
 use autoclap::autoclap;
-use clap::{App, Arg};
+use clap::{Arg, ArgAction, Command};
 use randompass::alphabet::Alphabet;
 
 #[cfg(not(tarpaulin_include))]
@@ -10,32 +10,40 @@ fn main() {
             Arg::new("length")
                 .long("length")
                 .short('l')
-                .takes_value(true)
-                .help("Password length."),
+                .help("Password length.")
+                .required(false),
         )
         .arg(
             Arg::new("no_lowercase")
                 .long("no_lowercase")
                 .short('o')
-                .help("Disable usage of lowercase letters."),
+                .action(ArgAction::SetTrue)
+                .help("Disable usage of lowercase letters.")
+                .required(false),
         )
         .arg(
             Arg::new("no_numbers")
                 .long("no_numbers")
                 .short('n')
-                .help("Disable usage of numbers."),
+                .action(ArgAction::SetTrue)
+                .help("Disable usage of numbers.")
+                .required(false),
         )
         .arg(
             Arg::new("no_special_chars")
                 .long("no_special_chars")
                 .short('c')
-                .help("Disable usage of special characters (i.e.: !, $, #)."),
+                .action(ArgAction::SetTrue)
+                .help("Disable usage of special characters (i.e.: !, $, #).")
+                .required(false),
         )
         .arg(
             Arg::new("no_uppercase")
                 .long("no_uppercase")
                 .short('u')
-                .help("Disable usage of uppercase letters."),
+                .action(ArgAction::SetTrue)
+                .help("Disable usage of uppercase letters.")
+                .required(false),
         )
         .try_get_matches()
         .unwrap_or_else(|e| e.exit());

@@ -123,7 +123,6 @@ impl Password {
             return Ok(());
         }
 
-
         Err(ValidateError::NoNumbers)
     }
 }
@@ -233,6 +232,19 @@ mod tests {
     }
 
     #[test]
+    fn test_pass_generate_fails_when_special_characters_but_some_requested() {
+        let args = matches_from(vec!["randompass"]);
+        let config = Configurator { args };
+
+        let actual = "nospecialchars".to_string();
+
+        assert_err!(
+            Password::validate_special_chars(&config, &actual),
+            Err(ValidateError::NoSpecialChars)
+        );
+    }
+
+    #[test]
     fn test_pass_generate_works_when_no_lowercase() {
         let args = matches_from(vec!["randompass", "-o"]);
         let config = Configurator { args };
@@ -248,6 +260,19 @@ mod tests {
         let config = Configurator { args };
 
         let actual = "abc".to_string();
+
+        assert_err!(
+            Password::validate_lowercase(&config, &actual),
+            Err(ValidateError::NoLowerCase)
+        );
+    }
+
+    #[test]
+    fn test_pass_generate_fails_when_lowercase_but_some_requested() {
+        let args = matches_from(vec!["randompass"]);
+        let config = Configurator { args };
+
+        let actual = "NOLOWERCASE".to_string();
 
         assert_err!(
             Password::validate_lowercase(&config, &actual),
@@ -279,6 +304,19 @@ mod tests {
     }
 
     #[test]
+    fn test_pass_generate_fails_when_uppercase_but_some_requested() {
+        let args = matches_from(vec!["randompass"]);
+        let config = Configurator { args };
+
+        let actual = "nouppercase".to_string();
+
+        assert_err!(
+            Password::validate_uppercase(&config, &actual),
+            Err(ValidateError::NoUpperCase)
+        );
+    }
+
+    #[test]
     fn test_pass_generate_works_when_no_numbers() {
         let args = matches_from(vec!["randompass", "-n"]);
         let config = Configurator { args };
@@ -294,6 +332,19 @@ mod tests {
         let config = Configurator { args };
 
         let actual = "123".to_string();
+
+        assert_err!(
+            Password::validate_numbers(&config, &actual),
+            Err(ValidateError::NoNumbers)
+        );
+    }
+
+    #[test]
+    fn test_pass_generate_fails_when_no_numbers_but_some_requested() {
+        let args = matches_from(vec!["randompass"]);
+        let config = Configurator { args };
+
+        let actual = "nonumbers".to_string();
 
         assert_err!(
             Password::validate_numbers(&config, &actual),

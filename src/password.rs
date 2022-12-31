@@ -11,7 +11,8 @@ impl Password {
         loop {
             let length: usize = config
                 .args
-                .value_of("length")
+                .get_one::<String>("length")
+                .map(|s| s.as_str())
                 .unwrap_or(&constants::DEFAULT_PASS_LEN.to_string())
                 .parse()
                 .unwrap();
@@ -24,9 +25,9 @@ impl Password {
             if Password::validate(config, &pass).is_ok() {
                 return pass;
             } else if watchdog == 0 {
-                    break;
+                break;
             }
-            
+
             watchdog -= 1;
         }
         "".to_string()
@@ -50,48 +51,77 @@ impl Password {
     }
     fn validate_special_chars(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
         for e in constants::SPECIAL_CHARS.to_vec().iter() {
-            if config.args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
+            if config.args.get_flag("no_special_chars") && pass.contains(&e.to_string()) {
                 return Err(ValidateError::NoSpecialChars);
-            } else if !config.args.is_present("no_special_chars") && pass.contains(&e.to_string()) {
+            } else if config.args.get_flag("no_special_chars") && !pass.contains(&e.to_string()) {
+                continue;
+            } else if pass.contains(&e.to_string()) {
                 return Ok(());
             }
         }
-        Ok(())
+
+        if config.args.get_flag("no_special_chars") {
+            return Ok(());
+        }
+
+        Err(ValidateError::NoSpecialChars)
     }
 
     fn validate_uppercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in b'A'..b'Z'+ 1 {
+        for e in b'A'..b'Z' + 1 {
             let c = e as char;
-            if config.args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
+            if config.args.get_flag("no_uppercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoUpperCase);
-            } else if !config.args.is_present("no_uppercase") && pass.contains(&c.to_string()) {
-                return Ok(());
-            }
-        }
-        Ok(())
-    }
-    fn validate_lowercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in b'a'..b'z'+ 1 {
-            let c = e as char;
-            if config.args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
-                return Err(ValidateError::NoLowerCase);
-            } else if !config.args.is_present("no_lowercase") && pass.contains(&c.to_string()) {
-                return Ok(());
-            }
-        }
-        Ok(())
-    }
-    fn validate_numbers(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in b'0'..b'9'+ 1 {
-            let c = e as char;
-            if config.args.is_present("no_numbers") && pass.contains(&c.to_string()) {
-                return Err(ValidateError::NoNumbers);
-            } else if !config.args.is_present("no_numbers") && pass.contains(&c.to_string()) {
+            } else if config.args.get_flag("no_uppercase") && !pass.contains(&c.to_string()) {
+                continue;
+            } else if pass.contains(&c.to_string()) {
                 return Ok(());
             }
         }
 
-        Ok(())
+        if config.args.get_flag("no_uppercase") {
+            return Ok(());
+        }
+
+        Err(ValidateError::NoUpperCase)
+    }
+
+    fn validate_lowercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
+        for e in b'a'..b'z' + 1 {
+            let c = e as char;
+            if config.args.get_flag("no_lowercase") && pass.contains(&c.to_string()) {
+                return Err(ValidateError::NoLowerCase);
+            } else if config.args.get_flag("no_lowercase") && !pass.contains(&c.to_string()) {
+                continue;
+            } else if pass.contains(&c.to_string()) {
+                return Ok(());
+            }
+        }
+
+        if config.args.get_flag("no_lowercase") {
+            return Ok(());
+        }
+
+        Err(ValidateError::NoLowerCase)
+    }
+
+    fn validate_numbers(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
+        for e in b'0'..b'9' + 1 {
+            let c = e as char;
+            if config.args.get_flag("no_numbers") && pass.contains(&c.to_string()) {
+                return Err(ValidateError::NoNumbers);
+            } else if config.args.get_flag("no_numbers") && !pass.contains(&c.to_string()) {
+                continue;
+            } else if pass.contains(&c.to_string()) {
+                return Ok(());
+            }
+        }
+
+        if config.args.get_flag("no_numbers") {
+            return Ok(());
+        }
+
+        Err(ValidateError::NoNumbers)
     }
 }
 
@@ -100,38 +130,46 @@ mod tests {
     use super::*;
 
     fn matches_from(arg_vec: Vec<&str>) -> clap::ArgMatches {
-        use clap::{App, Arg};
-        let args = App::new("randompass")
+        use clap::{Arg, ArgAction, Command};
+        let args = Command::new(format!("{}", env!("CARGO_PKG_NAME")))
             .arg(
                 Arg::new("length")
                     .long("length")
                     .short('l')
-                    .takes_value(true)
-                    .help("Password length."),
+                    .help("Password length.")
+                    .required(false),
             )
             .arg(
                 Arg::new("no_lowercase")
                     .long("no_lowercase")
                     .short('o')
-                    .help("Disable usage of lowercase letters."),
+                    .action(ArgAction::SetTrue)
+                    .help("Disable usage of lowercase letters.")
+                    .required(false),
             )
             .arg(
                 Arg::new("no_numbers")
                     .long("no_numbers")
                     .short('n')
-                    .help("Disable usage of numbers."),
+                    .action(ArgAction::SetTrue)
+                    .help("Disable usage of numbers.")
+                    .required(false),
             )
             .arg(
                 Arg::new("no_special_chars")
                     .long("no_special_chars")
                     .short('c')
-                    .help("Disable usage of special characters (i.e.: !, $, #)."),
+                    .action(ArgAction::SetTrue)
+                    .help("Disable usage of special characters (i.e.: !, $, #).")
+                    .required(false),
             )
             .arg(
                 Arg::new("no_uppercase")
                     .long("no_uppercase")
                     .short('u')
-                    .help("Disable usage of uppercase letters."),
+                    .action(ArgAction::SetTrue)
+                    .help("Disable usage of uppercase letters.")
+                    .required(false),
             )
             .get_matches_from(arg_vec);
         args
@@ -192,6 +230,19 @@ mod tests {
     }
 
     #[test]
+    fn test_pass_generate_fails_when_special_characters_but_some_requested() {
+        let args = matches_from(vec!["randompass"]);
+        let config = Configurator { args };
+
+        let actual = "nospecialchars".to_string();
+
+        assert_err!(
+            Password::validate_special_chars(&config, &actual),
+            Err(ValidateError::NoSpecialChars)
+        );
+    }
+
+    #[test]
     fn test_pass_generate_works_when_no_lowercase() {
         let args = matches_from(vec!["randompass", "-o"]);
         let config = Configurator { args };
@@ -207,6 +258,19 @@ mod tests {
         let config = Configurator { args };
 
         let actual = "abc".to_string();
+
+        assert_err!(
+            Password::validate_lowercase(&config, &actual),
+            Err(ValidateError::NoLowerCase)
+        );
+    }
+
+    #[test]
+    fn test_pass_generate_fails_when_lowercase_but_some_requested() {
+        let args = matches_from(vec!["randompass"]);
+        let config = Configurator { args };
+
+        let actual = "NOLOWERCASE".to_string();
 
         assert_err!(
             Password::validate_lowercase(&config, &actual),
@@ -238,6 +302,19 @@ mod tests {
     }
 
     #[test]
+    fn test_pass_generate_fails_when_uppercase_but_some_requested() {
+        let args = matches_from(vec!["randompass"]);
+        let config = Configurator { args };
+
+        let actual = "nouppercase".to_string();
+
+        assert_err!(
+            Password::validate_uppercase(&config, &actual),
+            Err(ValidateError::NoUpperCase)
+        );
+    }
+
+    #[test]
     fn test_pass_generate_works_when_no_numbers() {
         let args = matches_from(vec!["randompass", "-n"]);
         let config = Configurator { args };
@@ -253,6 +330,19 @@ mod tests {
         let config = Configurator { args };
 
         let actual = "123".to_string();
+
+        assert_err!(
+            Password::validate_numbers(&config, &actual),
+            Err(ValidateError::NoNumbers)
+        );
+    }
+
+    #[test]
+    fn test_pass_generate_fails_when_no_numbers_but_some_requested() {
+        let args = matches_from(vec!["randompass"]);
+        let config = Configurator { args };
+
+        let actual = "nonumbers".to_string();
 
         assert_err!(
             Password::validate_numbers(&config, &actual),

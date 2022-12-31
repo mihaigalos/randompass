@@ -53,10 +53,17 @@ impl Password {
         for e in constants::SPECIAL_CHARS.to_vec().iter() {
             if config.args.get_flag("no_special_chars") && pass.contains(&e.to_string()) {
                 return Err(ValidateError::NoSpecialChars);
-            } else if !config.args.get_flag("no_special_chars") && pass.contains(&e.to_string()) {
+            } else if config.args.get_flag("no_special_chars") && !pass.contains(&e.to_string()) {
+                continue;
+            } else if pass.contains(&e.to_string()) {
                 return Ok(());
             }
         }
+
+        if config.args.get_flag("no_special_chars") {
+            return Ok(());
+        }
+
         Err(ValidateError::NoSpecialChars)
     }
 
@@ -65,10 +72,18 @@ impl Password {
             let c = e as char;
             if config.args.get_flag("no_uppercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoUpperCase);
-            } else if !config.args.get_flag("no_uppercase") && pass.contains(&c.to_string()) {
+            } else if config.args.get_flag("no_uppercase") && !pass.contains(&c.to_string()) {
+                continue;
+            } else if pass.contains(&c.to_string()) {
                 return Ok(());
             }
+
         }
+
+        if config.args.get_flag("no_uppercase") {
+            return Ok(())
+        }
+
         Err(ValidateError::NoUpperCase)
     }
 
@@ -77,10 +92,18 @@ impl Password {
             let c = e as char;
             if config.args.get_flag("no_lowercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoLowerCase);
-            } else if !config.args.get_flag("no_lowercase") && pass.contains(&c.to_string()) {
+            } else if config.args.get_flag("no_lowercase") && !pass.contains(&c.to_string()) {
+                continue;
+            } else if pass.contains(&c.to_string()) {
                 return Ok(());
             }
+
         }
+
+        if config.args.get_flag("no_lowercase") {
+            return Ok(());
+        }
+
         Err(ValidateError::NoLowerCase)
     }
 
@@ -89,10 +112,17 @@ impl Password {
             let c = e as char;
             if config.args.get_flag("no_numbers") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoNumbers);
-            } else if !config.args.get_flag("no_numbers") && pass.contains(&c.to_string()) {
+            } else if config.args.get_flag("no_numbers") && !pass.contains(&c.to_string()) {
+                continue;
+            } else if pass.contains(&c.to_string()) {
                 return Ok(());
             }
         }
+
+        if config.args.get_flag("no_numbers") {
+            return Ok(());
+        }
+
 
         Err(ValidateError::NoNumbers)
     }
@@ -103,38 +133,46 @@ mod tests {
     use super::*;
 
     fn matches_from(arg_vec: Vec<&str>) -> clap::ArgMatches {
-        use clap::{App, Arg};
-        let args = App::new("randompass")
+        use clap::{Arg, ArgAction, Command};
+        let args = Command::new(format!("{}", env!("CARGO_PKG_NAME")))
             .arg(
                 Arg::new("length")
                     .long("length")
                     .short('l')
-                    .takes_value(true)
-                    .help("Password length."),
+                    .help("Password length.")
+                    .required(false),
             )
             .arg(
                 Arg::new("no_lowercase")
                     .long("no_lowercase")
                     .short('o')
-                    .help("Disable usage of lowercase letters."),
+                    .action(ArgAction::SetTrue)
+                    .help("Disable usage of lowercase letters.")
+                    .required(false),
             )
             .arg(
                 Arg::new("no_numbers")
                     .long("no_numbers")
                     .short('n')
-                    .help("Disable usage of numbers."),
+                    .action(ArgAction::SetTrue)
+                    .help("Disable usage of numbers.")
+                    .required(false),
             )
             .arg(
                 Arg::new("no_special_chars")
                     .long("no_special_chars")
                     .short('c')
-                    .help("Disable usage of special characters (i.e.: !, $, #)."),
+                    .action(ArgAction::SetTrue)
+                    .help("Disable usage of special characters (i.e.: !, $, #).")
+                    .required(false),
             )
             .arg(
                 Arg::new("no_uppercase")
                     .long("no_uppercase")
                     .short('u')
-                    .help("Disable usage of uppercase letters."),
+                    .action(ArgAction::SetTrue)
+                    .help("Disable usage of uppercase letters.")
+                    .required(false),
             )
             .get_matches_from(arg_vec);
         args

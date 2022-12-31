@@ -25,9 +25,9 @@ impl Password {
             if Password::validate(config, &pass).is_ok() {
                 return pass;
             } else if watchdog == 0 {
-                    break;
+                break;
             }
-            
+
             watchdog -= 1;
         }
         "".to_string()
@@ -61,7 +61,7 @@ impl Password {
     }
 
     fn validate_uppercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in b'A'..b'Z'+ 1 {
+        for e in b'A'..b'Z' + 1 {
             let c = e as char;
             if config.args.get_flag("no_uppercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoUpperCase);
@@ -73,7 +73,7 @@ impl Password {
     }
 
     fn validate_lowercase(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in b'a'..b'z'+ 1 {
+        for e in b'a'..b'z' + 1 {
             let c = e as char;
             if config.args.get_flag("no_lowercase") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoLowerCase);
@@ -85,7 +85,7 @@ impl Password {
     }
 
     fn validate_numbers(config: &Configurator, pass: &str) -> Result<(), ValidateError> {
-        for e in b'0'..b'9'+ 1 {
+        for e in b'0'..b'9' + 1 {
             let c = e as char;
             if config.args.get_flag("no_numbers") && pass.contains(&c.to_string()) {
                 return Err(ValidateError::NoNumbers);

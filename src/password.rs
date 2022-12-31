@@ -77,11 +77,10 @@ impl Password {
             } else if pass.contains(&c.to_string()) {
                 return Ok(());
             }
-
         }
 
         if config.args.get_flag("no_uppercase") {
-            return Ok(())
+            return Ok(());
         }
 
         Err(ValidateError::NoUpperCase)
@@ -97,7 +96,6 @@ impl Password {
             } else if pass.contains(&c.to_string()) {
                 return Ok(());
             }
-
         }
 
         if config.args.get_flag("no_lowercase") {

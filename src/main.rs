@@ -51,7 +51,7 @@ fn main() {
     let config = randompass::config::Configurator { args };
     let pass = randompass::password::Password::generate(&config, Alphabet::new(&config));
     if !pass.is_empty() {
-        println!("{}", pass);
+        println!("{pass}");
     } else {
         println!(
             "ERROR: Cannot generate password after MAX iterations. Consider lowering constraints."

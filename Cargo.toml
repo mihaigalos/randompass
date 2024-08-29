@@ -14,3 +14,6 @@ autoclap = "0.3.15"
 clap = { version = "4.5.4", features = ["cargo", "string"] }
 custom_error = "1.9.2"
 rand = "0.8.5"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(tarpaulin_include)"] }

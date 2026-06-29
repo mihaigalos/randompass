@@ -1,6 +1,6 @@
-use rand::distributions::Uniform;
-use rand::rngs::StdRng;
-use rand::{Rng, RngCore, SeedableRng};
+use rand::distr::Uniform;
+use rand::rngs::ThreadRng;
+use rand::RngExt;
 
 use crate::config::Configurator;
 use crate::constants;
@@ -8,7 +8,7 @@ use crate::constants;
 pub struct Alphabet {
     pub chars: Vec<char>,
     pub range: Uniform<usize>,
-    pub rng: StdRng,
+    pub rng: ThreadRng,
 }
 
 fn mixin_special_chars(config: &Configurator, chars: &mut Vec<char>) {
@@ -40,12 +40,6 @@ fn mixin_numbers(config: &Configurator, chars: &mut Vec<char>) {
     }
 }
 
-fn generate_seed() -> [u8; 32] {
-    let mut seed = [0u8; 32];
-    rand::thread_rng().fill_bytes(&mut seed);
-    seed
-}
-
 impl Alphabet {
     pub fn new(config: &Configurator) -> Alphabet {
         let mut chars: Vec<char> = Vec::with_capacity(constants::ESTIMATED_ALPHABET_CAPACITY);
@@ -58,8 +52,8 @@ impl Alphabet {
         let alphabet_length = chars.len();
         Alphabet {
             chars,
-            range: Uniform::new(0, alphabet_length),
-            rng: StdRng::from_seed(generate_seed()),
+            range: Uniform::new(0, alphabet_length).expect("alphabet is non-empty"),
+            rng: rand::rng(),
         }
     }
 

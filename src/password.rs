@@ -352,17 +352,15 @@ mod tests {
 
     #[test]
     fn test_pass_generate_fails_when_impossible_constraints() {
-        use rand::distributions::Uniform;
-        use rand::rngs::StdRng;
-        use rand::SeedableRng;
+        use rand::distr::Uniform;
 
         let args = matches_from(vec!["randompass", "-c", "-u", "-o", "-n"]);
         let config = Configurator { args };
         let chars: Vec<char> = vec!['a'];
         let alphabet = Alphabet {
             chars,
-            range: Uniform::new(0, 1),
-            rng: StdRng::from_seed([0u8; 32]),
+            range: Uniform::new(0, 1).expect("non-empty"),
+            rng: rand::rng(),
         };
 
         let actual = Password::generate(&config, alphabet);
